@@ -32,6 +32,15 @@ En lugar de iterar sobre una única variable que contenga las coordenadas agrupa
 }
 ```
 
+**Ejemplo corregido:**
+```latex
+\foreach \x/\y in {-1.2/-0.8, -0.8/-1.5} {
+    \begin{scope}[shift={(\x,\y)}]
+        % ...
+    \end{scope}
+}
+```
+
 ## 3. Incluir Imágenes Externas en LaTeX (`graphicx`)
 
 **El Problema:**
@@ -41,7 +50,6 @@ De forma nativa, LaTeX básico no cuenta con un comando directo para insertar ar
 Se debe utilizar el paquete estándar `graphicx`. Este paquete proporciona el comando `\includegraphics`, el cual permite importar imágenes y modificar sus atributos (como el ancho, el alto o el ángulo de rotación).
 
 **Ejemplo de uso:**
-
 ```latex
 % 1. Añadir al preámbulo (antes de \begin{document}):
 \usepackage{graphicx}
@@ -53,13 +61,88 @@ Se debe utilizar el paquete estándar `graphicx`. Este paquete proporciona el co
     \includegraphics[width=0.6\textwidth]{ruta/o/nombre_de_la_imagen.jpg}
 \end{center}
 ```
+
+## 4. Inclusión de Código Fuente (Bloques de Código)
+
+**El Problema:**
+Intentar pegar código de programación directamente en el flujo de texto de LaTeX provoca errores críticos de compilación debido a la presencia de caracteres reservados (como `{`, `}`, `%`, `_`, `#`). Además, el texto pierde el formato monoespaciado y el resaltado de sintaxis.
+
+**La Solución:**
+Utilizar el paquete `listings` para entornos de código ligeros y estándar. Permite definir palabras clave, colores para comentarios y strings, así como el ajuste automático de líneas largas.
+
+**Ejemplo de configuración (Preámbulo):**
+```latex
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    backgroundcolor=\color{gray!5},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    showstringspaces=false
+}
 ```
 
-**Ejemplo corregido:**
+**Ejemplo de uso en el cuerpo:**
 ```latex
-\foreach \x/\y in {-1.2/-0.8, -0.8/-1.5} {
-    \begin{scope}[shift={(\x,\y)}]
-        % ...
-    \end{scope}
-}
+\begin{lstlisting}[language=Python, caption={Cálculo de Impedancia}]
+# Código limpio sin conflictos con caracteres especiales de LaTeX
+def calcular_impedancia(r, x):
+    return (r**2 + x**2)**0.5
+\end{lstlisting}
+```
+
+## 5. Escape de Caracteres Especiales en Texto Plano
+
+**El Problema:**
+Al redactar explicaciones técnicas fuera de los bloques de código, el uso accidental de caracteres de control de LaTeX (especialmente el guion bajo `_` en nombres de variables o el signo `%` para porcentajes) corrompe la compilación generando errores opacos como `Missing $ inserted`.
+
+**La Solución:**
+Cualquier carácter reservado que se mencione en el texto normal debe ser precedido por una barra invertida (`\`), o bien aislarse dentro del comando de texto monoespaciado `\texttt{...}`.
+
+* **Caracteres que siempre deben escaparse:** `_`, `%`, `&`, `#`, `{`, `}`.
+* **Incorrecto:** La variable `config_base` controla el 100% del ciclo de reloj.
+* **Correcto:** La variable `config\_base` controla el 100\% del ciclo de reloj.
+* **Alternativa recomendada:** La variable `\texttt{config\_base}` controla el 100\% del ciclo de reloj.
+
+## 6. Escritura Uniforme de Unidades Técnicas (`siunitx`)
+
+**El Problema:**
+Escribir valores numéricos y unidades de ingeniería de forma manual (ej. `50 ohm`, `50 \Omega`, `10nF`) produce inconsistencias en el espaciado tipográfico, problemas de justificación de línea (separando el número de su unidad) y errores de formato en modo matemático.
+
+**La Solución:**
+Utilizar el paquete `siunitx` y su comando estandarizado `\qty{}{}`. Esto garantiza que los números, prefijos y unidades sigan estrictamente las normas tipográficas internacionales del Sistema Internacional.
+
+**Ejemplo de uso:**
+```latex
+% 1. Añadir al preámbulo:
+\usepackage{siunitx}
+
+% 2. Usar en el cuerpo del documento:
+El circuito requiere una resistencia de \qty{10}{\k\ohm} y un capacitor de \qty{100}{\n\F}.
+La frecuencia de operación del reloj principal es de \qty{16}{\MHz}.
+```
+
+## 7. Uso de Modo Matemático en Etiquetas de Gráficos (TikZ / Circuitikz)
+
+**El Problema:**
+Al colocar texto (*labels*) en componentes de Circuitikz o nodos de TikZ que incluyen subíndices (como `$R_1$`) o símbolos griegos (como `\Omega`), se suele omitir el entorno matemático, provocando fallos inmediatos al procesar el gráfico.
+
+**La Solución:**
+Toda notación científica, variable o unidad especial que resida dentro de los parámetros de un componente gráfico debe estar estrictamente encerrada entre signos de dólar `$ ... $`.
+
+**Ejemplo incorrecto (genera error):**
+```latex
+\draw (0,0) to[R, l=$R_1 = 10 \Omega$] (2,0);
+```
+
+**Ejemplo correcto:**
+```latex
+\draw (0,0) to[R, l=$R_1 = \qty{10}{\k\ohm}$] (2,0);
 ```
