@@ -1,0 +1,94 @@
+\documentclass[12pt,a4paper]{article}
+
+% Paquetes de idioma y codificación
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+
+% Paquetes de diseño y utilidades
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+
+% Configuración para bloques de código
+\lstset{
+    backgroundcolor=\color{gray!5},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{purple},
+    frame=single,
+    showstringspaces=false,
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+\title{\textbf{Guía Práctica: Sistema RAG y Base de Conocimiento}\\ \large (Retrieval-Augmented Generation) con ChromaDB}
+\author{Curso de Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+En nuestra Suite de Auditoría de Seguridad Informática, hemos implementado un sistema \textbf{RAG (Retrieval-Augmented Generation)}. Este actúa como el ``segundo cerebro'' o la memoria a largo plazo de nuestra herramienta. 
+
+En lugar de depender de búsquedas externas para resolver los mismos problemas repetidamente, nuestra base de datos (impulsada por ChromaDB) aprende de los errores específicos que cometemos durante el desarrollo y los guarda basándose en su \textbf{significado semántico}.
+
+\textbf{¿Qué significa esto?} \\
+A diferencia de una búsqueda tradicional que requiere coincidencias exactas de palabras (como hacer \texttt{Ctrl+F}), una base de datos vectorial entiende el contexto y la intención. Por ejemplo, si el RAG aprendió una solución para un error documentado como \textit{``Fallo de conexión por puertos bloqueados''}, y tú le preguntas al sistema \textit{``no me deja conectar al objetivo, creo que un firewall me detiene''}, el RAG sabrá que hablas del mismo problema y te entregará la respuesta correcta, ¡incluso si no usaste ni una sola palabra idéntica!
+
+\section{Arquitectura del Sistema}
+Nuestro flujo de conocimiento consta de los siguientes componentes:
+\begin{itemize}
+    \item \textbf{ChromaDB:} La base de datos vectorial local (almacenada en \texttt{chroma\_db/}).
+    \item \textbf{Archivos Markdown (\texttt{.md}):} Archivos legibles ubicados en \texttt{docs/} que actúan como la ``fuente de la verdad''.
+    \item \textbf{\texttt{knowledge\_db.py}:} Herramienta CLI para consultar e inyectar conocimientos.
+    \item \textbf{\texttt{exportar\_errores\_json.py}:} Script que detecta fallos en el orquestador automáticamente.
+\end{itemize}
+
+\section{¿Cómo alimentar el RAG?}
+
+Existen dos formas de enseñar a nuestra base de datos para que el conocimiento del grupo crezca de forma colaborativa:
+
+\subsection{1. Alimentación Manual (Conocimiento Teórico o de Entorno)}
+Cuando tu grupo resuelva un problema (ej. configuración de Docker, errores de Git o fallos de Python), documenten la solución:
+
+\begin{enumerate}
+    \item Editen el archivo Markdown correspondiente (ej. \texttt{docs/python.md}).
+    \item Estructuren su nuevo aporte creando un título usando doble almohadilla (\texttt{\#\#}).
+    \item Guarden el archivo y actualicen la memoria ejecutando en la terminal:
+\end{enumerate}
+
+\begin{lstlisting}[language=bash, caption={Actualizar colección de Python}]
+python knowledge_db.py -c python -u
+\end{lstlisting}
+\textit{Nota: La bandera \texttt{-c} define la colección y \texttt{-u} ordena la actualización (\texttt{update}).}
+
+\subsection{2. Flujo Automático (Feedback Loop de la Suite)}
+Si un módulo de la suite (ej. \texttt{osint.py}) falla durante la ejecución de \texttt{auditoria.py}, el error se guarda en \texttt{historial\_auditoria.json}.
+
+\begin{enumerate}
+    \item Extrae los fallos recientes del orquestador ejecutando:
+    \begin{lstlisting}[language=bash]
+python exportar_errores_json.py
+    \end{lstlisting}
+    \item Esto actualizará automáticamente el archivo \texttt{docs/auditoria.md}, dejando un espacio que dice \textbf{La Solución (Pendiente)}.
+    \item Reúnete con tu equipo, redacten la solución técnica allí y compilen el aprendizaje en el RAG:
+    \begin{lstlisting}[language=bash]
+python knowledge_db.py -c auditoria -u
+    \end{lstlisting}
+\end{enumerate}
+
+\section{¿Cómo consultar el RAG?}
+Para solucionar un problema, pregúntale a la base de datos usando lenguaje natural (sin importar si recuerdas las palabras exactas):
+\begin{lstlisting}[language=bash, caption={Consulta semántica en lenguaje natural}]
+python knowledge_db.py -c auditoria -q "falla el modulo osint por un rate limit"
+\end{lstlisting}
+
+\end{document}

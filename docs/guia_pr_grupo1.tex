@@ -1,0 +1,72 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{a4paper, margin=1in}
+
+\title{Guía Rápida de Pull Requests (PR) \\ \large Especial para el Grupo 1 (Reconocimiento DNS)}
+\author{Prof. César Rodríguez}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+Esta guía está diseñada específicamente para los estudiantes del \textbf{Grupo 1}. Detalla los pasos estandarizados para enviar sus contribuciones del archivo \texttt{dns\_recon.py} al repositorio principal del curso mediante \textit{Pull Requests} (PR) en GitHub.
+
+\section{Paso 1: Realizar un \textit{Fork} del Repositorio}
+Dado que no tienen permisos de escritura directa en el repositorio \texttt{main} del curso, primero deben crear una copia personal.
+\begin{enumerate}
+    \item Ingrese a la página del repositorio principal del curso en GitHub.
+    \item Haga clic en el botón \textbf{'Fork'} ubicado en la esquina superior derecha.
+    \item Seleccione su cuenta personal como destino para copiar el repositorio.
+\end{enumerate}
+
+\section{Paso 2: Clonar su Repositorio Localmente}
+Abra su terminal y clone el repositorio que ahora reside en su cuenta personal. Reemplace \texttt{SU\_USUARIO} con su nombre de usuario de GitHub:
+\begin{verbatim}
+git clone https://github.com/SU_USUARIO/CYBERSEGURIDAD.git
+cd CYBERSEGURIDAD
+\end{verbatim}
+
+\section{Paso 3: Crear una Rama de Trabajo (\textit{Branch})}
+Para mantener el orden, cree una rama específica para su asignación de DNS (reemplace la \texttt{X} por su número de estudiante, ej. 1, 2 o 3):
+\begin{verbatim}
+git checkout -b feature/grupo1-estudianteX-dns
+\end{verbatim}
+
+\section{Paso 4: Realizar los Cambios y Hacer \textit{Push}}
+Como miembros del Grupo 1, trabajarán \textbf{únicamente} en su archivo asignado.
+Una vez finalizada y probada su función localmente en \texttt{modulos/dns\_recon.py}:
+\begin{verbatim}
+git add modulos/dns_recon.py
+git commit -m 'Implementada funcion de registros DNS por Estudiante X'
+git push origin feature/grupo1-estudianteX-dns
+\end{verbatim}
+
+\section{Paso 5: Crear el \textit{Pull Request}}
+\begin{enumerate}
+    \item Vaya a la página de su repositorio (\textit{fork}) en GitHub desde su navegador web.
+    \item Verá un banner verde que dice \textbf{'Compare \& pull request'}. Haga clic en él.
+    \item En la descripción del PR, \textbf{debe} incluir una explicación clara de lo que desarrolló (ej. Consulta de registros A/AAAA o MX/NS).
+    \item Haga clic en \textbf{'Create pull request'}.
+\end{enumerate}
+
+\section*{Lista de Verificación antes de Enviar}
+Para que su Pull Request sea aprobado y pase la validación de \texttt{auditoria.py}, asegúrese de cumplir con los siguientes puntos:
+\begin{itemize}
+    \item[\checkmark] \textbf{Contrato de Datos:} Su función retorna un diccionario válido según \texttt{docs/schema\_resultados.json}.
+    \item[\checkmark] \textbf{Calidad de Código:} Incluyó \textit{Type Hinting} y \textit{Docstrings} (Estilo Google).
+    \item[\checkmark] \textbf{Resiliencia:} Su bloque de código está protegido por \texttt{try-except} para evitar que la suite falle si un dominio no existe.
+    \item[\checkmark] \textbf{Limpieza:} Eliminó la instrucción \texttt{raise NotImplementedError} de la plantilla.
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent \textit{Nota: Si el profesor solicita cambios en su código, no necesita crear un nuevo PR. Haga los cambios en su computadora, haga \texttt{commit} y \texttt{push} nuevamente; el PR se actualizará solo.}
+\end{document}

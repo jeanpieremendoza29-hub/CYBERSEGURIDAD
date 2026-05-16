@@ -3,6 +3,7 @@ import argparse
 import sys
 import json
 import os
+import traceback
 
 try:
     from jsonschema import validate
@@ -62,6 +63,18 @@ def ejecutar_modulo(func, *args, **kwargs):
         print(f"\n[!] Característica en desarrollo: {e}")
     except Exception as e:
         print(f"\n[!] Error inesperado en {func.__name__}: {e}")
+        
+        # Extraer el traceback completo y construir el registro de error
+        tb_str = traceback.format_exc()
+        modulo_nombre = func.__module__.split('.')[-1].upper() if hasattr(func, '__module__') else "Desconocido"
+        return {
+            "modulo": modulo_nombre,
+            "estudiante": "Fallo en ejecución",
+            "target": args[0] if args else "Desconocido",
+            "status": "error",
+            "error_message": tb_str,
+            "data": {"funcion_fallida": func.__name__}
+        }
     return None
 
 def guardar_historial(resultados):

@@ -17,3 +17,6 @@ env/
 
 # Exámenes y solucionarios (Privado)
 examen*
+
+# Base de datos vectorial (ChromaDB)
+chroma_db/

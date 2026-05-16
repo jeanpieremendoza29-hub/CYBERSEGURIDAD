@@ -46,6 +46,13 @@ Para asegurar la calidad profesional de la suite, cada entrega debe cumplir con:
 3. **Manejo de Errores:** Uso de bloques `try-except` para prevenir caídas del sistema.
 4. **Validación:** Antes de realizar un `push`, verifica que tu retorno pase la validación de `auditoria.py`.
 
+## 🧠 Base de Conocimiento y Sistema RAG
+
+Esta suite cuenta con un "segundo cerebro" o sistema RAG (*Retrieval-Augmented Generation*) impulsado por ChromaDB. Está diseñado para almacenar y recuperar colaborativamente soluciones a errores comunes encontrados durante el desarrollo (LaTeX, Python, configuración, fallos en los módulos, etc.).
+
+- **Para consultar un error rápidamente:** Ejecuta `python knowledge_db.py -c <tema> -q "tu error en lenguaje natural"` (por ejemplo: `-c auditoria`).
+- **Documentación completa:** Para aprender a alimentar esta base de datos manualmente o mediante el flujo de autodiagnóstico del orquestador, consulta la guía oficial en `docs/guia_rag.pdf` (compilada desde `docs/guia_rag.tex`).
+
 ## 🔄 Flujo de Trabajo (Git)
 
 Para sincronizar tu trabajo, utiliza el script proporcionado:
