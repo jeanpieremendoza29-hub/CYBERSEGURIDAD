@@ -1,0 +1,54 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{a4paper, margin=1in}
+
+\title{Informe de Estado de Pull Requests \\ \large Curso: Seguridad Informática}
+\author{Prof. César Rodríguez}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Resumen de Integración}
+Este documento presenta el estado actual de los \textit{Pull Requests} enviados por los distintos grupos de desarrollo de la Suite de Auditoría. Solo se listan los grupos cuyos módulos han sido evaluados, corregidos y fusionados con éxito en la rama principal, cumpliendo con el contrato de datos establecido.
+
+\section*{Grupos con Pull Requests Aprobados}
+
+\subsection*{Grupo 2 - OSINT (\texttt{osint.py})}
+\textbf{Estado:} \textcolor{green!70!black}{\textbf{Aprobado e Integrado}} \\
+\textbf{Calificación:} \textbf{10/10} (Entrega correcta desde el principio)
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Estudiante 1 (WHOIS):} Implementó la consulta WHOIS para extraer fechas de registro, nombre de la organización y servidores DNS.
+    \item \textbf{Estudiante 2 (Dorks - Subdominios):} Desarrolló la automatización de Google Dorks para descubrir subdominios omitiendo el subdominio principal.
+    \item \textbf{Estudiante 3 (Dorks - Archivos Expuestos):} Implementó la búsqueda de archivos de configuración (\texttt{.env}, \texttt{.ini}) gestionando correctamente el límite de peticiones (Rate Limit HTTP 429).
+\end{itemize}
+
+\subsection*{Grupo 3 - Discovery (\texttt{discovery.py})}
+\textbf{Estado:} \textcolor{green!70!black}{\textbf{Aprobado e Integrado}} \\
+\textbf{Calificación:} \textbf{8/10} (Penalización por errores cometidos por el Estudiante 2)
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Estudiante 1 (Ping Sweep):} Implementación correcta de escaneo ICMP, incluyendo la actualización para soporte multiplataforma (Windows y Linux/macOS).
+    \item \textbf{Estudiante 2 (TCP SYN Ping):} Lógica de escaneo con Scapy funcional. Se destaca la excelente práctica de enviar paquetes RST para cerrar conexiones \textit{Half-Open}. El contrato de datos fue corregido y verificado.
+    \item \textbf{Estudiante 3 (TCP ACK Ping):} Excelente implementación del escaneo ACK detectando las respuestas con bandera RST (\texttt{0x4}).
+\end{itemize}
+\textit{Nota:} El código se fusionó en la rama principal tras aplicar correcciones menores de sintaxis e importación de dependencias por parte del revisor.
+
+\section*{Grupos Pendientes de Revisión}
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Grupo 4 - Scanning (\texttt{scanning.py}):} A la espera de Pull Request unificado.
+    \item \textbf{Grupo 1 - Reconocimiento DNS (\texttt{dns\_recon.py}):} A la espera de Pull Request unificado.
+\end{itemize}
+
+\vspace{1cm}
+\hrule
+\vspace{0.5cm}
+\noindent \textit{El presente informe se actualizará conforme los grupos restantes finalicen sus entregas y superen la validación estricta de \texttt{auditoria.py}.}
+
+\end{document}
