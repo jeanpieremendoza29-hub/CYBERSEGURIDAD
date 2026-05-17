@@ -1,4 +1,4 @@
-# Grupo 3: Descubrimiento de Hosts (3 estudiantes)
+# Grupo 3: Descubrimiento de Hosts (3 estudiantes - listo el pull request)
 import datetime
 import ipaddress
 import subprocess
