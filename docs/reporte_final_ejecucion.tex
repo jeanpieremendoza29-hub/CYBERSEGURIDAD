@@ -1,0 +1,97 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting,es-noshorthands]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!5},
+    showstringspaces=false
+}
+
+\title{Reporte de Ejecución en Producción \\ \large Suite Modular de Auditoría de Seguridad}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Estado del Proyecto: \textcolor{green!70!black}{Integración Exitosa}}
+
+Estimados estudiantes de los Grupos 1, 2, 3 y 4:
+
+Me complace informarles que la \textbf{primera fase} de desarrollo e integración de nuestra Suite de Auditoría de Seguridad ha concluido con un éxito rotundo. Gracias a su esfuerzo y adaptación a la arquitectura modular, hemos logrado construir una base sólida, funcional, escalable y tolerante a fallos.
+
+\section*{Prueba de Fuego en Producción}
+
+Para validar la interoperabilidad de los módulos, se ejecutó una auditoría en vivo contra el servidor de pruebas oficial de Nmap (\texttt{scanme.nmap.org}). La ejecución del orquestador (\texttt{auditoria.py}) activó los módulos de Reconocimiento DNS (Grupo 1) y Escaneo de Puertos (Grupo 4) simultáneamente.
+
+\subsection*{Resultados Técnicos Obtenidos:}
+
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Validación de Contratos:} Todos los módulos ejecutados superaron de manera estricta la validación del esquema \texttt{schema\_resultados.json}, obteniendo el estado \texttt{[OK]}.
+    
+    \item \textbf{Módulo DNS (Grupo 1):} 
+    \begin{itemize}[label=--]
+        \item Se consultaron exitosamente los registros A/AAAA.
+        \item Se procesaron los registros MX, NS, TXT y SOA manejando correctamente las ausencias de registros sin romper la ejecución.
+    \end{itemize}
+
+    \item \textbf{Módulo Scanning (Grupo 4):}
+    \begin{itemize}[label=--]
+        \item Se ejecutó un escaneo TCP real utilizando \textit{sockets}.
+        \item Se detectó exitosamente que los puertos \textbf{22 (SSH)} y \textbf{80 (HTTP)} se encontraban \textbf{abiertos}.
+        \item Se validó correctamente que el puerto \textbf{443 (HTTPS)} se encontraba cerrado.
+    \end{itemize}
+    
+    \item \textbf{Persistencia:} El orquestador empaquetó perfectamente todos los resultados JSON y los guardó de forma estructurada en el archivo \texttt{historial\_auditoria.json}.
+\end{itemize}
+
+\section*{Tarea: Ejecución Local y Análisis}
+
+Se instruye a todos los estudiantes a descargar la última versión de la rama principal (\texttt{master}) y ejecutar la auditoría localmente para familiarizarse con el producto final:
+
+\begin{enumerate}
+    \item Sincronice su repositorio local (puede usar \texttt{git pull} o el script \texttt{update\_repo.sh}).
+    \item Ejecute la suite de auditoría utilizando el siguiente comando:
+    \begin{verbatim}
+python auditoria.py scanme.nmap.org --dns-all --scan "22, 80, 443"
+    \end{verbatim}
+    \item Abra el archivo \texttt{historial\_auditoria.json} y estudie detalladamente cómo el orquestador unificó las salidas de diferentes grupos bajo el mismo estándar de datos, consolidando el trabajo en paralelo.
+\end{enumerate}
+
+\section*{Próximos Pasos: Esto es solo el principio}
+
+Si bien tenemos una suite operativa, este es apenas el cimiento de nuestro proyecto. La arquitectura modular que hemos construido de manera colaborativa está diseñada precisamente para escalar. En las próximas semanas, ampliaremos las capacidades de la herramienta agregando nuevos módulos, tales como:
+
+\begin{itemize}[label=$\bullet$]
+    \item Escaneo avanzado de vulnerabilidades.
+    \item Fuerza bruta y enumeración de directorios web.
+    \item Generación automatizada de reportes ejecutivos.
+\end{itemize}
+
+¡Manténganse atentos a las próximas asignaciones!
+
+\section*{Conclusión y Lecciones Aprendidas}
+
+Este proyecto ha demostrado el poder de la ingeniería de software colaborativa. Han aprendido de primera mano que en un entorno profesional, el respeto por los contratos de datos (APIs/Schemas) y el uso disciplinado de herramientas de control de versiones (Git) son pilares fundamentales para que decenas de desarrolladores puedan construir un sistema unificado sin pisarse los pies.
+
+\vspace{1cm}
+\noindent \textbf{¡Felicitaciones a todos por el excelente trabajo realizado!} \newline
+La Fase 1 de la Suite de Auditoría de Seguridad Informática queda oficialmente operativa.
+
+\newpage
+\section*{Anexo: Registro de \texttt{historial\_auditoria.json}}
+A continuación se expone la salida cruda generada y almacenada por el orquestador durante nuestra prueba de fuego:
+\lstinputlisting{../historial_auditoria.json}
+
+\end{document}
