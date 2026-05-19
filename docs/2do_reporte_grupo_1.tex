@@ -1,0 +1,61 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{a4paper, margin=1in}
+
+\title{Segundo Reporte de Revisión de Pull Request \\ \large Módulo: Reconocimiento DNS (Grupo 1)}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Estado de la Integración: \textcolor{orange}{Integración Forzada (Merge 'ours')}}
+
+\noindent \textbf{Calificación Final:} \textbf{5/10}
+
+\vspace{0.5cm}
+Estimados estudiantes del Grupo 1:
+
+Se ha procedido a cerrar y procesar su segundo \textit{Pull Request} (PR \#2). Sin embargo, debido a que no se aplicaron correctamente las correcciones solicitadas en el primer reporte, la integración se realizó mediante una técnica de control de versiones conocida como \textbf{fusión estratégica (\texttt{git merge -s ours})}. 
+
+Esto significa que su PR fue cerrado para destrabar el proyecto, pero \textbf{sus cambios exactos fueron descartados} y reemplazados en la rama principal por una versión corregida manualmente por la administración del repositorio.
+
+\section*{Motivos de la Resolución}
+
+A pesar de las instrucciones detalladas en el primer reporte (\texttt{reporte\_grupo\_1.tex}), el envío presentó las siguientes faltas críticas:
+
+\subsection*{1. Reincidencia en la Modificación de Archivos Ajenos}
+Volvieron a incluir en su envío modificaciones destructivas al archivo \texttt{discovery.py} (llegando a crear un duplicado en la raíz del proyecto) y a \texttt{requirements.txt}. Esto causó graves conflictos directos con la rama principal y amenazó con borrar el trabajo ya validado del Grupo 3.
+
+\subsection*{2. Incumplimiento del Contrato de Datos (\texttt{schema\_resultados.json})}
+Ignoraron las reglas de salida que permite que el orquestador valide su código. En su envío:
+\begin{itemize}[label=$\bullet$]
+    \item Siguieron utilizando la clave \texttt{'error'} en lugar de la obligatoria \texttt{'error\_message'}.
+    \item Mantuvieron la clave inventada \texttt{'querytype'}.
+    \item Implementaron una validación que cambiaba el estado a \texttt{'empty'} si las listas estaban vacías. El esquema es estricto: solo se permite \texttt{'success'} o \texttt{'error'}. Una consulta a un dominio que no devuelve datos es una consulta exitosa (\texttt{'success'}) con listas vacías.
+    \item El Estudiante 1 no utilizó el código asignado (\texttt{'E1'}) sino su nombre completo.
+\end{itemize}
+
+\subsection*{3. Trabajo Incompleto}
+Los estudiantes 2 y 3 no implementaron en absoluto la lógica requerida y enviaron sus funciones manteniendo la excepción \texttt{raise NotImplementedError}, lo cual rompe el flujo del programa.
+
+\section*{Aspectos Positivos y Acciones Tomadas}
+
+A pesar de los fallos de integración estructural, \textbf{la lógica central de captura de excepciones programada por el Estudiante 1 usando la librería \texttt{dns.resolver} fue muy buena y resiliente}. 
+
+Para no retrasar el avance general de la Suite de Auditoría, he tomado su lógica base de consultas, he aplicado estrictamente el contrato de datos, y he clonado la estructura para resolver las funciones faltantes de los Estudiantes 2 y 3. Esta versión pulida es la que actualmente se encuentra en producción dentro de \texttt{modulos/dns\_recon.py}.
+
+\vspace{1cm}
+\noindent \textbf{Lección aprendida para el futuro:} En un entorno de desarrollo colaborativo profesional, apegarse al contrato de datos (las interfaces de comunicación) y respetar las reglas de las herramientas de control de versiones es tan o más importante que la lógica del código en sí.
+
+\vspace{0.5cm}
+\noindent El módulo DNS se da por completado.
+
+\end{document}

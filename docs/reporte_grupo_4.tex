@@ -1,0 +1,47 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{a4paper, margin=1in}
+
+\title{Reporte de Revisión de Pull Request \\ \large Módulo: Escaneo de Puertos (Grupo 4)}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Estado de la Integración: \textcolor{green!70!black}{Aprobado e Integrado}}
+
+\noindent \textbf{Calificación Final:} \textbf{9 en base a 10}
+
+\vspace{0.5cm}
+Estimados estudiantes del Grupo 4:
+
+Se ha auditado su envío para el módulo de Escaneo de Puertos (\texttt{scanning.py}). Me complace informarles que el código ha sido \textbf{aprobado y fusionado} en la rama principal del proyecto.
+
+\section*{Aspectos Destacados (Puntos Positivos)}
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Implementación Real:} Lograron reemplazar exitosamente la simulación por un escaneo de puertos TCP real utilizando la librería nativa \texttt{socket}.
+    \item \textbf{Manejo Eficiente:} El uso de \texttt{s.connect\_ex()} para capturar el código de estado sin levantar excepciones por cada puerto cerrado demuestra un excelente nivel técnico.
+    \item \textbf{Resiliencia:} La configuración de un \texttt{timeout} (1.0s) asegura que el orquestador no se quede colgado esperando respuestas de hosts inactivos.
+    \item \textbf{Manejo de Errores:} Atrapan correctamente cualquier fallo general en el bloque \texttt{try-except} principal, resguardando la ejecución de la suite.
+\end{itemize}
+
+\section*{Motivo de la Penalización (Corrección Menor)}
+El envío fue casi perfecto, pero incurrieron en una infracción leve al \textbf{Contrato de Datos (\texttt{schema\_resultados.json})}:
+\begin{itemize}[label=$\bullet$]
+    \item En la clave \texttt{'estudiante'}, utilizaron el nombre completo (\texttt{'Andrés Maldonado'}) en lugar del identificador estándar requerido (\texttt{'E1'}).
+\end{itemize}
+
+Dado que el resto del módulo tiene una calidad excepcional, la administración aplicó esta mínima corrección directamente en el servidor antes de la integración para no retrasar el proyecto.
+
+\vspace{1cm}
+\noindent ¡Excelente trabajo! El módulo de Escaneo de Puertos se da por completado y la suite ya es capaz de interactuar con objetivos reales en la red.
+
+\end{document}
