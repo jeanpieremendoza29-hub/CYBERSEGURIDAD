@@ -1,0 +1,66 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{a4paper, margin=1in}
+
+\title{Reporte de Revisión de Pull Request \\ \large Módulo: Reconocimiento DNS (Grupo 1)}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Estado del Pull Request: \textcolor{red}{Rechazado (Solicitud de Cambios)}}
+
+Estimados estudiantes del Grupo 1: tras auditar su \textit{Pull Request} (PR), se ha determinado que actualmente \textbf{no puede ser integrado} a la rama principal de la Suite de Auditoría. Se han detectado violaciones críticas a las reglas de colaboración del repositorio y al contrato de datos.
+
+\section*{Hallazgos y Correcciones Necesarias}
+
+\subsection*{1. Violación Crítica: Modificación de Archivos Ajenos}
+Han roto la \textbf{Regla de Oro} del trabajo colaborativo descrita en el archivo \texttt{README.md}:
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{\texttt{discovery.py}:} Sobrescribieron el trabajo del Grupo 3, revirtiendo código que ya había sido aprobado.
+    \item \textbf{\texttt{requirements.txt}:} Eliminaron dependencias estructurales críticas del proyecto (\texttt{jsonschema}, \texttt{dnspython}) y agregaron módulos nativos de Python (\texttt{datetime}, \texttt{ipaddress}, \texttt{subprocess}) lo cual causará errores en la instalación del entorno virtual.
+\end{itemize}
+\textbf{Acción requerida:} Deben descartar todos los cambios introducidos en estos dos archivos en su rama de trabajo.
+
+\subsection*{2. Contrato de Datos (\texttt{schema\_resultados.json})}
+El diccionario que retorna su función no cumple con el esquema oficial:
+\begin{itemize}[label=$\bullet$]
+    \item Cambiaron la clave obligatoria \texttt{'error\_message'} por \texttt{'error'}.
+    \item Inventaron la clave \texttt{'querytype'}, la cual no existe en el esquema de validación.
+    \item El campo \texttt{'status'} solo acepta \texttt{'success'} o \texttt{'error'}. Si un dominio no tiene registros, el estado debe ser \texttt{'success'} (la consulta fue exitosa) con las listas de datos vacías, nunca \texttt{'empty'}.
+    \item En la clave \texttt{'estudiante'}, deben usar el identificador estándar \texttt{'E1'}, no su nombre completo.
+\end{itemize}
+
+\subsection*{3. Limpieza de Código (Código Muerto)}
+Olvidaron eliminar la instrucción \texttt{raise NotImplementedError(...)} al inicio de la función. Al estar posicionada antes del bloque \texttt{try-except}, el programa lanzará la excepción de inmediato y el resto de la lógica que programaron jamás se ejecutará.
+
+\subsection*{4. Resiliencia (Puntos Positivos)}
+\textcolor{green!70!black}{\textbf{Aprobado parcialmente:}} El manejo de excepciones específicas de la librería \texttt{dns.resolver} (tales como \texttt{NXDOMAIN}, \texttt{NoNameservers}, etc.) está excelentemente estructurado. Solo deben asegurarse de ajustar las variables dentro de los bloques \texttt{except} para que respeten la clave \texttt{'error\_message'}.
+
+\section*{Instrucciones para la Corrección}
+No es necesario que abran un nuevo Pull Request. Pueden arreglar su rama actual ejecutando los siguientes comandos en su terminal local. 
+
+Primero, restauren los archivos que no les corresponden para que vuelvan a su estado original (el de la rama principal del curso):
+\begin{verbatim}
+git checkout origin/main -- modulos/discovery.py requirements.txt
+\end{verbatim}
+
+Luego, apliquen las correcciones a su código en \texttt{modulos/dns\_recon.py}. Una vez que prueben que todo funciona, suban los cambios a su rama:
+\begin{verbatim}
+git add modulos/dns_recon.py modulos/discovery.py requirements.txt
+git commit -m 'Correcciones de PR: contrato de datos y limpieza de archivos ajenos'
+git push origin <nombre-de-su-rama>
+\end{verbatim}
+
+\vspace{1cm}
+\noindent Quedo a la espera de las correcciones para proceder con la aprobación y el pase a producción.
+
+\end{document}
