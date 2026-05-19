@@ -1,0 +1,48 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{a4paper, margin=1in}
+
+\title{Evaluación de Examen Teórico-Práctico (Grupal)}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Datos de los Estudiantes}
+\textbf{Nombres:} Jeanpiere Mendoza, Edsei Tovar, Anyel Boada \\
+\textbf{Grupo:} 1 (Reconocimiento DNS) \\
+\textbf{Calificación Final:} \textbf{\textcolor{blue}{9.5/10}}
+
+\section*{Evaluación Detallada}
+
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Pregunta 1 (Registros A vs AAAA):} \textbf{2/2 puntos}. Excelente definición. Aportan correctamente la distinción del direccionamiento IP (IPv4 vs IPv6) y el detalle técnico preciso de la longitud en bits de ambos protocolos (32 bits y 128 bits respectivamente).
+    
+    \item \textbf{Pregunta 2 (Auditoría de correos):} \textbf{2/2 puntos}. Identifican correctamente de forma directa el registro \texttt{MX} (\textit{Mail Exchange}) como el encargado de enrutar los correos de la organización.
+    
+    \item \textbf{Pregunta 3 (Seguridad en registros TXT):} \textbf{2/2 puntos}. Respuesta sobresaliente. Identifican perfectamente el uso del registro TXT en la validación de correos, nombrando explícitamente el uso de políticas SPF (\textit{Sender Policy Framework}) para verificaciones anti-spam.
+    
+    \item \textbf{Pregunta 4 (Registro SOA):} \textbf{2/2 puntos}. Muy buena profundidad técnica. Nombran acertadamente los campos internos del registro de inicio de autoridad (MNAME, RNAME, Expire, Retry y Serial Number).
+    
+    \item \textbf{Pregunta 5 (Infraestructura y registro NS):} \textbf{1.5/2 puntos}. En la práctica de OSINT es cierto que suele revelar el proveedor tecnológico, pero hay una ligera falta de rigor teórico. El registro delega la autoridad de nombres, no necesariamente el alojamiento web. La mención sobre las fugas de datos es algo ambigua en este contexto directo.
+\end{itemize}
+
+\vspace{1cm}
+
+\section*{Comentarios Finales}
+\noindent El equipo demuestra un excelente dominio teórico de los conceptos de DNS. Destaca especialmente su precisión técnica al nombrar campos internos de registros complejos como SOA y medidas de seguridad reales aplicadas sobre DNS como SPF. Tienen una base inmejorable para programar su módulo en Python.
+
+\vspace{0.5cm}
+\begin{center}
+    \textit{¡Excelente trabajo en equipo!}
+\end{center}
+
+\end{document}

@@ -1,0 +1,48 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{a4paper, margin=1in}
+
+\title{Evaluación de Examen Teórico-Práctico}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Datos del Estudiante}
+\textbf{Nombre:} César León \\
+\textbf{Grupo:} 2 (OSINT y Huella Digital) \\
+\textbf{Calificación Final:} \textbf{\textcolor{blue}{9.5/10}}
+
+\section*{Evaluación Detallada}
+
+\begin{itemize}[label=$\bullet$]
+    \item \textbf{Pregunta 1 (Significado de OSINT):} \textbf{2/2 puntos}. Define correctamente OSINT (fuentes legales y públicas) y suma un excelente punto al mencionar que el no interactuar directamente hace que el proceso sea indetectable (reconocimiento pasivo).
+    
+    \item \textbf{Pregunta 2 (Datos críticos en WHOIS):} \textbf{2/2 puntos}. Identifica los tres bloques clave: fechas (creación/expedición), dueño/empresa (datos de contacto) y DNS (servidores de nombres).
+    
+    \item \textbf{Pregunta 3 (Google Dork \texttt{site:dominio.com -www}):} \textbf{2/2 puntos}. Explica bien el uso de ambos operadores. Destaca la utilidad de excluir el subdominio principal para ``eliminar el ruido'' y enfocarse en la infraestructura de interés.
+    
+    \item \textbf{Pregunta 4 (Búsqueda de archivos \texttt{.ini} o \texttt{.env}):} \textbf{1.5/2 puntos}. Aunque identifica el uso del operador \texttt{filetype:}, propone dos dorks separados en lugar de combinarlos en uno exacto mediante el operador \texttt{OR}. Además, introduce espacios (ej. \texttt{Site: ejemplo.com}) que pueden invalidar la sintaxis en el motor de búsqueda.
+    
+    \item \textbf{Pregunta 5 (Error HTTP 429 en Python):} \textbf{2/2 puntos}. Excelente razonamiento táctico (\textit{``lentitud = sigilo''}). Identifica correctamente la limitación de Google por sospecha de bot y propone soluciones válidas de programación: uso de retrasos y captura de excepciones para guardar el progreso obtenido.
+\end{itemize}
+
+\vspace{1cm}
+
+\section*{Comentarios Finales}
+\noindent El estudiante demuestra un muy buen entendimiento de los conceptos teóricos y prácticos de OSINT. Destaca su enfoque táctico en el manejo del escaneo pasivo y la evasión de bloqueos, cualidades indispensables para un auditor. Solo debe prestar un poco más de atención a la sintaxis estricta al redactar Google Dorks complejos.
+
+\vspace{0.5cm}
+\begin{center}
+    \textit{¡Muy buen trabajo!}
+\end{center}
+
+\end{document}
