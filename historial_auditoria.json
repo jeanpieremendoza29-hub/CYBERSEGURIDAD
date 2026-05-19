@@ -26,5 +26,81 @@
             "nota": "B\u00fasqueda completada o interrumpida por rate-limit de Google."
         },
         "error_message": null
+    },
+    {
+        "modulo": "Reconocimiento DNS",
+        "grupo": 1,
+        "estudiante": "E1",
+        "target": "scanme.nmap.org",
+        "timestamp": "2026-05-19T16:33:31.013432",
+        "data": {
+            "A": [
+                "45.33.32.156"
+            ],
+            "AAAA": [
+                "2600:3c01::f03c:91ff:fe18:bb2f"
+            ]
+        },
+        "status": "success",
+        "error_message": null
+    },
+    {
+        "modulo": "Reconocimiento DNS",
+        "grupo": 1,
+        "estudiante": "E2",
+        "target": "scanme.nmap.org",
+        "timestamp": "2026-05-19T16:33:31.207231",
+        "data": {
+            "MX": [],
+            "NS": []
+        },
+        "status": "success",
+        "error_message": null
+    },
+    {
+        "modulo": "Reconocimiento DNS",
+        "grupo": 1,
+        "estudiante": "E3",
+        "target": "scanme.nmap.org",
+        "timestamp": "2026-05-19T16:33:31.372224",
+        "data": {
+            "TXT": [],
+            "SOA": []
+        },
+        "status": "success",
+        "error_message": null
+    },
+    {
+        "modulo": "Scanning",
+        "grupo": 4,
+        "estudiante": "E1",
+        "target": "scanme.nmap.org",
+        "timestamp": "2026-05-19T12:33:31.595623",
+        "status": "success",
+        "data": {
+            "puertos_escaneados": [
+                22,
+                80,
+                443
+            ],
+            "detalles": [
+                {
+                    "puerto": 22,
+                    "estado": "abierto",
+                    "protocolo": "TCP"
+                },
+                {
+                    "puerto": 80,
+                    "estado": "abierto",
+                    "protocolo": "TCP"
+                },
+                {
+                    "puerto": 443,
+                    "estado": "cerrado",
+                    "protocolo": "TCP"
+                }
+            ]
+        },
+        "error_message": null
     }
 ]
