@@ -1,0 +1,70 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{listings}
+
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    backgroundcolor=\color{gray!5},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    keywordstyle=\color{blue},
+    frame=single
+}
+
+\title{\textbf{Procedimiento Estandarizado ante Errores} \\ \large Suite de Auditoría y Sistema RAG}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Introducción}
+En el desarrollo colaborativo de nuestra Suite de Auditoría, los errores son una oportunidad de aprendizaje grupal. Este documento describe los pasos obligatorios que cada estudiante debe seguir al encontrarse con fallos en el código (Python), problemas de red o errores de validación, asegurando que queden registrados en nuestra memoria colectiva (Sistema RAG) para su futuro análisis.
+
+\section*{Paso 1: Captura del Error en el Historial}
+El orquestador principal (\texttt{auditoria.py}) está diseñado para registrar fallos en \texttt{historial\_auditoria.json}. Para que esto funcione desde tu módulo (ej. \texttt{dns\_recon.py}, \texttt{osint.py}):
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Errores Controlados:} Si usas bloques \texttt{try-except}, asegúrate de atrapar la excepción y retornar el diccionario del contrato de datos con la clave \texttt{'status': 'error'} y el detalle del fallo en \texttt{'error\_message'}.
+    \item \textbf{Errores Inesperados:} Si tu script crashea repentinamente, el orquestador atrapará el fallo (Traceback) automáticamente y lo guardará en el JSON.
+\end{itemize}
+
+\section*{Paso 2: Exportar el Error a la Base de Conocimiento}
+Una vez que el error se ha guardado en \texttt{historial\_auditoria.json}, debes extraerlo para que el sistema RAG (ChromaDB) pueda procesarlo. En tu terminal, ejecuta:
+\begin{lstlisting}[language=bash]
+python exportar_errores_json.py
+\end{lstlisting}
+Este script leerá el historial y generará/actualizará el archivo \texttt{docs/auditoria.md}, creando una sección con el detalle del fallo y un espacio en blanco que dice \textbf{``La Solución (Pendiente)''}.
+
+\section*{Paso 3: Investigación y Solución (Trabajo Colaborativo)}
+Con el error ya exportado a texto plano:
+\begin{enumerate}
+    \item Abre el archivo \texttt{docs/auditoria.md} en tu editor.
+    \item Busca la sección del error reciente que causó tu módulo.
+    \item Investiga la solución con tu grupo. (Tip: Puedes consultar si un error similar ya ocurrió antes ejecutando \texttt{python knowledge\_db.py -c auditoria -q 'tu problema'}).
+    \item Reemplaza la nota \textit{*(Agrega la solución aquí...)} con la explicación técnica de por qué ocurrió el fallo y cómo solucionarlo de manera definitiva.
+\end{enumerate}
+
+\section*{Paso 4: Actualizar la Base Vectorial (RAG)}
+Para que el ``cerebro'' de la clase aprenda esta nueva solución de forma semántica, debes indexar el documento actualizado ejecutando:
+\begin{lstlisting}[language=bash]
+python knowledge_db.py -c auditoria -u
+\end{lstlisting}
+A partir de este momento, cualquier estudiante que consulte el RAG con un problema similar encontrará tu solución.
+
+\section*{Paso 5: Enviar los Cambios (Pull Request)}
+Finalmente, para que el profesor y el resto de los grupos reciban tanto tu corrección de código como la actualización de la documentación (\texttt{auditoria.md}):
+\begin{lstlisting}[language=bash]
+git add .
+git commit -m 'Fix: Solucionado error en modulo X y actualizado RAG de auditoria'
+git push origin <nombre-de-tu-rama>
+\end{lstlisting}
+Abre tu \textit{Pull Request} en GitHub e indica en la descripción que el error fue resuelto y documentado en el Sistema RAG.
+
+\end{document}

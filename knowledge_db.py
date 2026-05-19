@@ -60,7 +60,7 @@ def process_markdown_and_populate(topic: str):
         )
         print(f"✅ Se indexaron {len(documents)} registros de errores de '{topic}' en ChromaDB.\n")
 
-def query_error(topic: str, query_text: str, n_results: int = 2):
+def query_error(topic: str, query_text: str, n_results: int = 2, threshold: float = 1.2):
     """Realiza una búsqueda semántica en la base de datos de errores."""
     collection = get_collection(topic)
     if collection.count() == 0:
@@ -73,20 +73,30 @@ def query_error(topic: str, query_text: str, n_results: int = 2):
     )
     
     print(f"🔍 Resultados para la búsqueda en '{topic}': '{query_text}'\n" + "="*60)
+    encontrados = 0
     for i in range(len(results['ids'][0])):
         title = results['metadatas'][0][i]['title']
         document = results['documents'][0][i]
         distance = results['distances'][0][i] if 'distances' in results and results['distances'] else "N/A"
         
+        # Ignoramos los resultados que superen la distancia permitida
+        if isinstance(distance, float) and distance > threshold:
+            continue
+            
+        encontrados += 1
         dist_str = f"{distance:.4f}" if isinstance(distance, float) else str(distance)
         print(f"📌 Título: {title} (Distancia: {dist_str})")
         print(f"📄 Contenido:\n{document}\n" + "-"*60)
+        
+    if encontrados == 0:
+        print(f"⚠️ No se encontraron resultados relevantes (umbral de distancia > {threshold}).")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Base de datos vectorial de errores y conocimientos")
     parser.add_argument("-q", "--query", type=str, help="Búsqueda del error en lenguaje natural")
     parser.add_argument("-u", "--update", action="store_true", help="Actualiza la base de datos leyendo el archivo .md correspondiente")
     parser.add_argument("-c", "--collection", type=str, default="latex", help="Tema a consultar/actualizar (por defecto: latex). Busca docs/<tema>.md")
+    parser.add_argument("-t", "--threshold", type=float, default=1.2, help="Umbral de distancia máxima permitida (ej. 1.2)")
     
     args = parser.parse_args()
     collection = get_collection(args.collection)
@@ -97,9 +107,9 @@ if __name__ == "__main__":
     
     # 2. Hacemos la consulta si se proporcionó una
     if args.query:
-        query_error(args.collection, args.query)
+        query_error(args.collection, args.query, threshold=args.threshold)
     elif not args.update:
         script_name = os.path.basename(sys.argv[0])
         print(f"💡 Sugerencia: Puedes buscar errores usando: python {script_name} -c {args.collection} -q 'tu error'")
         consulta_ejemplo = "Me da error Missing $ cuando escribo texto con guiones bajos"
-        query_error(args.collection, consulta_ejemplo)
+        query_error(args.collection, consulta_ejemplo, threshold=args.threshold)
