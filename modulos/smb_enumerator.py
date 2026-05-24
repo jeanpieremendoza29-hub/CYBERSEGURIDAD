@@ -70,6 +70,7 @@ class SMBEnumerator:
 
 if __name__ == "__main__":
     # Área de pruebas independiente para el Grupo 2
+    # import json
     # enum = SMBEnumerator("10.0.0.5")
     # resultados = enum.run()
-    # print(resultados)
+    # print(json.dumps(resultados, indent=4))

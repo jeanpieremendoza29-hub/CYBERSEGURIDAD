@@ -5,8 +5,9 @@ import logging
 import datetime
 
 class BannerGrabber:
-    def __init__(self, ip_address, timeout=3):
+    def __init__(self, ip_address, ports=None, timeout=3):
         self.ip_address = ip_address
+        self.ports = ports if ports else [21, 22, 80, 443]
         self.timeout = timeout
         # Expresión regular para limpiar caracteres no imprimibles (útil para limpiar el banner)
         self.clean_regex = re.compile(r'[^a-zA-Z0-9\s\.\-\/\:]')
@@ -47,10 +48,35 @@ class BannerGrabber:
             
         return banner_data
 
+    def run(self):
+        """
+        Orquesta la captura de banners en los puertos especificados y
+        empaqueta los resultados usando el esquema oficial del proyecto.
+        """
+        print(f"[*] Iniciando Banner Grabbing en {self.ip_address}...")
+        resultados_banners = []
+        
+        for p in self.ports:
+            resultados_banners.append(self.grab_port(p))
+            
+        # REGLA DE ORO: Cumplir con schema_resultados.json
+        return {
+            "modulo": "Banner Grabbing",
+            "grupo": 1,
+            "estudiante": "Pendiente", # Los estudiantes deben colocar su identificador (ej. E1)
+            "target": self.ip_address,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "status": "success",
+            "data": {
+                "banners": resultados_banners
+            },
+            "error_message": None
+        }
+
 if __name__ == "__main__":
     # Área de pruebas independiente para el Grupo 1
+    import json
     target = "127.0.0.1"
-    grabber = BannerGrabber(target)
-    print(f"Iniciando captura de anuncios en {target}...")
-    for p in [21, 22, 80]:
-        print(grabber.grab_port(p))
+    grabber = BannerGrabber(target, ports=[21, 22, 80])
+    resultados = grabber.run()
+    print(json.dumps(resultados, indent=4))

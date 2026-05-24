@@ -3,6 +3,7 @@ import ftplib
 import threading
 import queue
 import logging
+import datetime
 
 class FTPBruteForcer:
     def __init__(self, ip_address, max_threads=5):
@@ -62,7 +63,19 @@ class FTPBruteForcer:
         for t in threads:
             t.join()
             
-        return self.found_credentials
+        # REGLA DE ORO: Cumplir con schema_resultados.json
+        return {
+            "modulo": "Fuerza Bruta FTP",
+            "grupo": 3,
+            "estudiante": "Pendiente", # Los estudiantes deben colocar su identificador
+            "target": self.ip_address,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "status": "success",
+            "data": {
+                "credenciales_encontradas": self.found_credentials
+            },
+            "error_message": None
+        }
 
 if __name__ == "__main__":
     # Área de pruebas independiente para el Grupo 3
@@ -70,4 +83,5 @@ if __name__ == "__main__":
     # inst = FTPBruteForcer("127.0.0.1")
     # inst.load_dictionaries(["admin", "root"], ["12345", "admin", "password"])
     # resultados = inst.run()
-    # print(resultados)
+    # import json
+    # print(json.dumps(resultados, indent=4))

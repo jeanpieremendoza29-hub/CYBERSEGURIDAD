@@ -12,7 +12,10 @@ except ImportError:
     HAS_JSONSCHEMA = False
 
 # Validación pre-importación de los archivos de módulos
-modulos_esperados = ["dns_recon.py", "osint.py", "discovery.py", "scanning.py"]
+modulos_esperados = [
+    "dns_recon.py", "osint.py", "discovery.py", "scanning.py",
+    "banner_grabber.py", "smb_enumerator.py", "bruteforce_ftp.py", "bruteforce_web.py"
+]
 directorio_modulos = os.path.join(os.path.dirname(os.path.abspath(__file__)), "modulos")
 
 for modulo in modulos_esperados:
@@ -27,6 +30,33 @@ from modulos import dns_recon   # Grupo 1
 from modulos import osint       # Grupo 2
 from modulos import discovery   # Grupo 3
 from modulos import scanning    # Grupo 4
+from modulos import banner_grabber  # Grupo 1 (Fase II)
+from modulos import smb_enumerator  # Grupo 2 (Fase II)
+from modulos import bruteforce_ftp  # Grupo 3 (Fase II)
+from modulos import bruteforce_web  # Grupo 4 (Fase II)
+
+# --- Funciones adaptadoras para instanciar las clases de la Fase II ---
+def wrapper_banner_grabbing(target):
+    instancia = banner_grabber.BannerGrabber(target)
+    return instancia.run()
+
+def wrapper_smb_enumeration(target):
+    instancia = smb_enumerator.SMBEnumerator(target)
+    return instancia.run()
+
+def wrapper_ftp_bruteforce(target):
+    instancia = bruteforce_ftp.FTPBruteForcer(target)
+    # Cargar diccionarios básicos de prueba para la integración
+    instancia.load_dictionaries(["admin", "root", "anonymous"], ["12345", "admin", "password", ""])
+    return instancia.run()
+
+def wrapper_web_bruteforce(target):
+    # Definir URL por defecto si el target es solo una IP/dominio
+    url = target if target.startswith("http") else f"http://{target}/login.php"
+    # Plantilla genérica para pruebas de integración
+    instancia = bruteforce_web.WebBruteForcer(url, {"username": "", "password": ""}, "Bienvenido")
+    instancia.load_dictionaries(["admin"], ["12345", "password"])
+    return instancia.run()
 
 def validar_resultado(resultado):
     """
@@ -134,7 +164,14 @@ def main():
 
     args = parser.parse_args()
 
-    print(f"[*] Iniciando auditoria para: {args.target}")
+    print("\n" + "="*65)
+    print(" ⚠️  ADVERTENCIA ÉTICA Y LEGAL")
+    print(" Esta suite de auditoría ha sido desarrollada con fines")
+    print(" estrictamente académicos. El uso de estos módulos contra")
+    print(" servidores sin autorización explícita es un delito.")
+    print("="*65)
+
+    print(f"\n[*] Iniciando auditoria para: {args.target}")
 
     resultados_totales = []
 
@@ -172,15 +209,19 @@ def main():
             res = ejecutar_modulo(scanning.scan_ports_dispatcher, args.target, args.scan)
             if res: resultados_totales.append(res)
             
-        # --- Esqueletos de ejecución para la Fase II ---
+        # --- Ejecución Integrada de la Fase II ---
         if args.banner:
-            print("\n[!] Módulo de Banner Grabbing (Grupo 1) invocado. Pendiente de integración final por el Grupo 4.")
+            res = ejecutar_modulo(wrapper_banner_grabbing, args.target)
+            if res: resultados_totales.append(res)
         if args.smb:
-            print("\n[!] Módulo de Enumeración SMB (Grupo 2) invocado. Pendiente de integración final por el Grupo 4.")
+            res = ejecutar_modulo(wrapper_smb_enumeration, args.target)
+            if res: resultados_totales.append(res)
         if args.brute_ftp:
-            print("\n[!] Módulo de Fuerza Bruta FTP (Grupo 3) invocado. Pendiente de integración final por el Grupo 4.")
+            res = ejecutar_modulo(wrapper_ftp_bruteforce, args.target)
+            if res: resultados_totales.append(res)
         if args.brute_web:
-            print("\n[!] Módulo de Fuerza Bruta Web (Grupo 4) invocado. Pendiente de integración final por el Grupo 4.")
+            res = ejecutar_modulo(wrapper_web_bruteforce, args.target)
+            if res: resultados_totales.append(res)
 
         guardar_historial(resultados_totales)
     except AttributeError as e:

@@ -1,0 +1,62 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting,es-noshorthands]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{xcolor}
+
+\title{\textbf{Código de Ética y Reglas de Uso}\\ \large Suite de Auditoría de Seguridad Informática}
+\author{Prof. César Rodríguez \\ \small Curso: Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Preámbulo}
+Las herramientas y módulos desarrollados durante el curso de Seguridad Informática, incluyendo escaneo de puertos, enumeración, recolección de información (OSINT) y ataques de fuerza bruta, tienen un potencial dual. Si bien son fundamentales para comprender cómo proteger sistemas, también pueden ser empleadas de forma maliciosa para comprometer la infraestructura de terceros.
+
+Por consiguiente, el desarrollo y uso de este software requiere un estricto apego a los principios éticos y legales que rigen la profesión de la ciberseguridad.
+
+\section*{1. Declaración de Responsabilidad}
+El uso de cualquier script, módulo o técnica descrita en este repositorio es responsabilidad exclusiva del estudiante. Ni el profesor César Rodríguez, ni la institución académica asumen responsabilidad alguna por el mal uso directo o indirecto del código aquí desarrollado.
+
+\section*{2. Reglas de Uso Obligatorias}
+Al descargar, ejecutar o modificar el código fuente del orquestador (\texttt{auditoria.py}) y sus módulos asociados, el estudiante acepta cumplir las siguientes reglas ineludibles:
+\begin{itemize}
+    \item \textbf{Autorización Explícita:} Queda terminantemente prohibido ejecutar escaneos, enumeraciones o ataques de diccionario contra cualquier servidor, dominio, red o dirección IP sin el consentimiento previo, explícito y por escrito de su propietario.
+    \item \textbf{Entornos de Prueba:} Las pruebas de los módulos deben realizarse de manera estrictamente local (\texttt{127.0.0.1}), en máquinas virtuales propias, o contra servidores de prueba autorizados expresamente para fines educativos (por ejemplo, \texttt{scanme.nmap.org}).
+    \item \textbf{Impacto Cero:} Se prohíbe el uso de estas herramientas para realizar ataques de Denegación de Servicio (DoS), interrupción de operaciones, o extracción no autorizada de datos.
+\end{itemize}
+
+\section*{3. Consecuencias Académicas y Legales}
+El incumplimiento de este Código de Ética será tratado como una falta disciplinaria muy grave. Dependiendo de la severidad de la infracción, puede conllevar desde la reprobación automática del curso y expulsión de la institución, hasta el reporte formal a las autoridades competentes, dado que el acceso no autorizado a sistemas informáticos es un delito penal.
+
+\vspace{1.5cm}
+
+\begin{center}
+\fbox{
+\parbox{0.9\textwidth}{
+    \vspace{0.3cm}
+    \begin{center}
+        \textbf{Acuerdo de Compromiso}
+    \end{center}
+    \vspace{0.2cm}
+    
+    \textit{He leído y comprendido íntegramente este Código de Ética. Me comprometo a utilizar las herramientas desarrolladas en las Fases I, II y III exclusivamente para fines académicos, defensivos y éticos.}
+    
+    \vspace{1.5cm}
+    Nombre del Estudiante: \hrulefill \\
+    
+    \vspace{1cm}
+    Firma del Estudiante: \hrulefill \\
+    
+    \vspace{1cm}
+    Fecha: \hrulefill
+    \vspace{0.3cm}
+}
+}
+\end{center}
+
+\end{document}

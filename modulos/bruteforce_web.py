@@ -3,6 +3,7 @@ import requests
 import threading
 import queue
 import logging
+import datetime
 
 class WebBruteForcer:
     def __init__(self, target_url, login_data_template, success_indicator, max_threads=5):
@@ -61,11 +62,25 @@ class WebBruteForcer:
         for t in threads:
             t.join()
             
-        return self.found_credentials
+        # REGLA DE ORO: Cumplir con schema_resultados.json
+        return {
+            "modulo": "Fuerza Bruta Web",
+            "grupo": 4,
+            "estudiante": "Pendiente", # Los estudiantes deben colocar su identificador (ej. E1)
+            "target": self.target_url,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "status": "success",
+            "data": {
+                "credenciales_encontradas": self.found_credentials
+            },
+            "error_message": None
+        }
 
 if __name__ == "__main__":
     # Área de pruebas independiente para el Grupo 4
     print("Módulo de Fuerza Bruta Web (Plantilla Base).")
     # inst = WebBruteForcer("http://127.0.0.1/login.php", {}, "Bienvenido,")
     # inst.load_dictionaries(["admin"], ["12345", "password"])
-    # inst.run()
+    # resultados = inst.run()
+    # import json
+    # print(json.dumps(resultados, indent=4))
