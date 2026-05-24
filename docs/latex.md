@@ -165,3 +165,30 @@ Se deben realizar ajustes en el preámbulo para incluir la codificación T1 y de
 
 **Ejemplo de uso corregido en texto:**
 Preferir `flags='R'` en lugar de usar dobles comillas `flags="R"`.
+
+## 9. Error de compilación con `\widthof` en entornos de lista (`enumitem` sin `calc`)
+
+**El Problema:**
+Al intentar ajustar dinámicamente el ancho de las etiquetas en un entorno de lista como `description` mediante el paquete `enumitem` usando la opción `labelwidth=\widthof{...}`, LaTeX produce el error:
+```text
+! Undefined control sequence.
+<argument> \widthof
+```
+Esto ocurre debido a que la macro `\widthof` es provista por el paquete `calc` y no por `enumitem` de manera nativa. Sin importar `calc` en el preámbulo, LaTeX no reconoce la función `\widthof`.
+
+**La Solución:**
+Importar explícitamente el paquete `calc` en el preámbulo del documento.
+
+**Ejemplo de configuración corregida (Preámbulo):**
+```latex
+\usepackage{enumitem}
+\usepackage{calc} % Requerido para habilitar \widthof y otras macros de cálculo de medidas
+```
+
+**Ejemplo de uso corregido:**
+```latex
+\begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries Programación Orientada a Objetos (POO)}]
+    \item[\textbf{Programación Orientada a Objetos (POO)}] Paradigma de programación basado en el concepto de clases y objetos.
+\end{description}
+```
+

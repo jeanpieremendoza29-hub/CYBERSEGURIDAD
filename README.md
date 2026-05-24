@@ -8,10 +8,18 @@ Para maximizar la eficiencia y evitar cuellos de botella, el proyecto utiliza un
 
 ### 1. Independencia por Módulos
 Cada grupo tiene su propio archivo de desarrollo en la carpeta `modulos/`.
+
+**Fase I: Recopilación y Escaneo (Semanas 1-4)**
 - **Grupo 1 (DNS):** `modulos/dns_recon.py`
 - **Grupo 2 (OSINT):** `modulos/osint.py`
 - **Grupo 3 (Discovery):** `modulos/discovery.py`
 - **Grupo 4 (Scanning):** `modulos/scanning.py`
+
+**Fase II: Enumeración y Ataques (Semanas 5-7)**
+- **Grupo 1 (Banner Grabbing):** `modulos/banner_grabber.py`
+- **Grupo 2 (NetBIOS/SMB):** `modulos/smb_enumerator.py`
+- **Grupo 3 (Fuerza Bruta FTP):** `modulos/bruteforce_ftp.py`
+- **Grupo 4 (Fuerza Bruta Web):** `modulos/bruteforce_web.py`
 
 **Regla de Oro:** Está estrictamente prohibido modificar `auditoria.py` o los archivos de otros grupos. Tu trabajo se limita exclusivamente a tu archivo asignado.
 
