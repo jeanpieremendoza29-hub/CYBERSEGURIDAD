@@ -21,7 +21,13 @@ Cada grupo tiene su propio archivo de desarrollo en la carpeta `modulos/`.
 - **Grupo 3 (Fuerza Bruta FTP):** `modulos/bruteforce_ftp.py`
 - **Grupo 4 (Fuerza Bruta Web):** `modulos/bruteforce_web.py`
 
-**Regla de Oro:** Está estrictamente prohibido modificar `auditoria.py` o los archivos de otros grupos. Tu trabajo se limita exclusivamente a tu archivo asignado.
+**Fase III: Aplicaciones Web y Reportes (Semanas 8-10)**
+- **Grupo 1 (Web Crawler):** `modulos/web_crawler.py`
+- **Grupo 2 (Escáner XSS/LFI):** `modulos/vuln_xss_lfi.py`
+- **Grupo 3 (Escáner SQLi):** `modulos/vuln_sqli.py`
+- **Grupo 4 (Reportes e Integración):** Expansión de `auditoria.py` (Orquestador) y generación de reportes.
+
+**Regla de Oro:** Está estrictamente prohibido modificar los archivos de otros grupos. La modificación de `auditoria.py` está reservada de manera exclusiva al **Grupo 4** para las tareas de integración global.
 
 ### 2. El Contrato de Datos (La Clave del Paralelismo)
 No necesitas esperar a que los grupos de "Reconocimiento" terminen para que tu código de "Escaneo" funcione. La integración no depende del código de otros, sino del **cumplimiento del contrato de salida**.
