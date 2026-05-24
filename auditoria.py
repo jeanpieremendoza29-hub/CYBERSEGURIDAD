@@ -125,6 +125,13 @@ def main():
     scan_group.add_argument("--scan", metavar="PUERTOS", help="Escaneo TCP/UDP (Grupo 4)")
     scan_group.add_argument("--ping-sweep", action="store_true", help="Descubrimiento de hosts (Grupo 3)")
 
+    # Grupo Fase II: Enumeración y Ataques
+    fase2_group = parser.add_argument_group('Enumeración y Ataques (Fase II)')
+    fase2_group.add_argument("--banner", action="store_true", help="Banner Grabbing en puertos comunes (Grupo 1)")
+    fase2_group.add_argument("--smb", action="store_true", help="Enumeración de sesiones nulas SMB (Grupo 2)")
+    fase2_group.add_argument("--brute-ftp", action="store_true", help="Ataque de fuerza bruta a FTP (Grupo 3)")
+    fase2_group.add_argument("--brute-web", action="store_true", help="Ataque de fuerza bruta a Web (Grupo 4)")
+
     args = parser.parse_args()
 
     print(f"[*] Iniciando auditoria para: {args.target}")
@@ -164,6 +171,16 @@ def main():
         if args.scan:
             res = ejecutar_modulo(scanning.scan_ports_dispatcher, args.target, args.scan)
             if res: resultados_totales.append(res)
+            
+        # --- Esqueletos de ejecución para la Fase II ---
+        if args.banner:
+            print("\n[!] Módulo de Banner Grabbing (Grupo 1) invocado. Pendiente de integración final por el Grupo 4.")
+        if args.smb:
+            print("\n[!] Módulo de Enumeración SMB (Grupo 2) invocado. Pendiente de integración final por el Grupo 4.")
+        if args.brute_ftp:
+            print("\n[!] Módulo de Fuerza Bruta FTP (Grupo 3) invocado. Pendiente de integración final por el Grupo 4.")
+        if args.brute_web:
+            print("\n[!] Módulo de Fuerza Bruta Web (Grupo 4) invocado. Pendiente de integración final por el Grupo 4.")
 
         guardar_historial(resultados_totales)
     except AttributeError as e:
