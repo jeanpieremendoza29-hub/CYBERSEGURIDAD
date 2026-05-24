@@ -1,3 +1,4 @@
+# Módulo a desarrollar por el Grupo 4 (Fase II: Fuerza Bruta Web)
 import requests
 import threading
 import queue
@@ -19,7 +20,7 @@ class WebBruteForcer:
             try:
                 user, password = self.queue.get(timeout=1)
                 
-                # TODO: Reemplazar los valores de usuario y contraseña en el diccionario template
+                    # TODO: Reemplazar los valores de usuario y contraseña en el diccionario template
                 # payload = self.login_data_template.copy()
                 # payload['username_field'] = user
                 # payload['password_field'] = password
@@ -38,6 +39,11 @@ class WebBruteForcer:
             finally:
                 self.queue.task_done()
 
+    # NOTA SOBRE LOS DICCIONARIOS:
+    # ¿De dónde provienen users_list y passwords_list?
+    # 1. Durante el desarrollo/pruebas (Grupo 4), pueden definirse estáticamente o leerse de un archivo .txt local de prueba.
+    # 2. En la integración final (Semana 7), el orquestador principal (auditoria.py / que también es del Grupo 4) 
+    #    será el responsable de cargar los archivos de diccionarios reales (ej. rockyou.txt) indicados por el usuario y pasar estas listas como parámetros.
     def load_dictionaries(self, users_list, passwords_list):
         """Llena la cola con todas las combinaciones posibles de usuario/contraseña."""
         for u in users_list:

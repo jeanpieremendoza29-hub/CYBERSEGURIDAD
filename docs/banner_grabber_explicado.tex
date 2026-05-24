@@ -1,0 +1,43 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{\textbf{Explicación del Módulo: Banner Grabbing}\\ \large \texttt{banner\_grabber.py}}
+\author{Suite de Auditoría de Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+El módulo \texttt{banner\_grabber.py} (asignado al Grupo 1 para la Fase II) tiene como objetivo conectarse a puertos abiertos en un servidor objetivo y capturar el mensaje de bienvenida o ``banner'' que emiten los servicios. Este banner suele revelar información crítica, como el nombre y la versión exacta del software (ej. \textit{Apache 2.4.49} o \textit{OpenSSH 8.2}), lo cual es el primer paso para buscar vulnerabilidades conocidas.
+
+\section*{¿Cómo funciona el código paso a paso?}
+
+\begin{enumerate}
+    \item \textbf{Gestión de Sockets (Conexión de bajo nivel):}
+    A diferencia de módulos de más alto nivel (como \texttt{requests} para Web), este script utiliza la librería estándar \texttt{socket}. Esto permite hablar directamente el lenguaje de Internet (TCP/IP). El método \texttt{connect\_ex} intenta abrir una conexión con el objetivo; si retorna \texttt{0}, significa que el puerto está abierto.
+
+    \item \textbf{El Estímulo (Diferencia entre protocolos):}
+    Algunos servicios son ``habladores''. Por ejemplo, si te conectas a un puerto FTP (21) o SSH (22), el servidor te saluda inmediatamente. Sin embargo, los servidores web (puerto 80 o 443) son ``tímidos'': esperan a que tú pidas algo primero. Por eso, el código incluye una condición especial para el puerto 80, enviando una petición cruda (\texttt{HEAD / HTTP/1.0}) para obligar al servidor a responder con su banner.
+
+    \item \textbf{Recepción y Limpieza (Expresiones Regulares):}
+    El script recibe los datos del servidor (\texttt{s.recv(1024)}). Como la red a veces introduce caracteres especiales, secuencias de escape o caracteres no imprimibles que romperían nuestro formato JSON final, se utiliza una Expresión Regular (\texttt{self.clean\_regex = re.compile(...)}) para purificar el texto, dejando únicamente letras, números y signos de puntuación básicos.
+
+\end{enumerate}
+
+\section*{La Regla de Oro: Contrato de Datos}
+Actualmente, el método \texttt{grab\_port} devuelve un pequeño diccionario con las llaves \texttt{port}, \texttt{status} y \texttt{banner}. 
+
+\textbf{¡Atención Grupo 1!} Para que este módulo pueda integrarse con éxito en el orquestador final (\texttt{auditoria.py}) manejado por el Grupo 4, ustedes deberán modificar el retorno de esta función o crear un método superior (ej. \texttt{run()}) que envuelva estos resultados dentro del formato oficial establecido en \texttt{schema\_resultados.json} (incluyendo llaves como \texttt{modulo}, \texttt{grupo}, \texttt{status}, etc.).
+
+\section*{Conclusión}
+Este módulo enseña los fundamentos de las redes en Python. Entender cómo forjar conexiones TCP en crudo y manipular bytes permite a los analistas de seguridad ir más allá de las herramientas comerciales y crear sus propios escáneres personalizados.
+
+\end{document}

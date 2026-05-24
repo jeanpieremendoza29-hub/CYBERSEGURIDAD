@@ -1,6 +1,8 @@
+# Módulo a desarrollar por el Grupo 1 (Fase I: Captura de Anuncios)
 import socket
 import re
 import logging
+import datetime
 
 class BannerGrabber:
     def __init__(self, ip_address, timeout=3):

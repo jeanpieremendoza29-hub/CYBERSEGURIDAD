@@ -1,3 +1,4 @@
+# Módulo a desarrollar por el Grupo 3 (Fase II: Fuerza Bruta FTP)
 import ftplib
 import threading
 import queue
@@ -39,6 +40,11 @@ class FTPBruteForcer:
             finally:
                 self.queue.task_done()
 
+    # NOTA SOBRE LOS DICCIONARIOS:
+    # ¿De dónde provienen users_list y passwords_list?
+    # 1. Durante el desarrollo/pruebas (Grupo 3), pueden definirse estáticamente o leerse de un archivo .txt local de prueba.
+    # 2. En la integración final (Semana 7), el orquestador principal (auditoria.py / Grupo 4) será el responsable
+    #    de cargar los archivos de diccionarios reales indicados por el usuario y pasar estas listas como parámetros.
     def load_dictionaries(self, users_list, passwords_list):
         """Llena la cola con todas las combinaciones posibles (Producto Cartesiano)."""
         for u in users_list:

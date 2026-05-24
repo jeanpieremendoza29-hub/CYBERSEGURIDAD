@@ -1,0 +1,47 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{\textbf{Explicación del Módulo: Fuerza Bruta FTP}\\ \large \texttt{bruteforce\_ftp.py}}
+\author{Suite de Auditoría de Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+El módulo \texttt{bruteforce\_ftp.py} (asignado al Grupo 3 para la Fase II) tiene como objetivo automatizar un ataque de \textbf{Fuerza Bruta basado en Diccionario} contra un servidor FTP. En términos sencillos, el script actúa como un atacante que intenta abrir una caja fuerte probando sistemáticamente una lista de combinaciones posibles de usuarios y contraseñas hasta dar con la correcta.
+
+\section*{¿Cómo funciona el código paso a paso?}
+
+\begin{enumerate}
+    \item \textbf{Generación de Combinaciones (Carga de Diccionarios):} 
+    El método \texttt{load\_dictionaries} toma una lista de nombres de usuario posibles (ej. \textit{admin, root}) y una lista de contraseñas (ej. \textit{12345, password}). Luego, mezcla ambas listas para generar todas las combinaciones posibles (el producto cartesiano) y las guarda en una 'cola de trabajo' (\texttt{queue.Queue}).
+
+    \item \textbf{Trabajo en Equipo (Uso de Hilos / Concurrencia):}
+    Si tuviéramos que probar mil contraseñas una por una, el proceso de autenticación en red sería demasiado lento. El método \texttt{run} soluciona esto creando varios ``trabajadores'' simultáneos (Hilos o \textit{Threads}). Cada hilo toma velozmente una combinación de la cola de trabajo y la prueba al mismo tiempo que sus compañeros.
+
+    \item \textbf{La Prueba de Conexión (\texttt{\_worker}):}
+    Cada hilo utiliza la librería integrada de Python \texttt{ftplib} para intentar iniciar sesión en el servidor objetivo (\texttt{ftp.login}). 
+    \begin{itemize}
+        \item Si la contraseña es incorrecta, el servidor rechaza la conexión con el \textbf{Código 530} (Permiso denegado). El script intercepta este error (\texttt{ftplib.error\_perm}), lo ignora silenciosamente y pasa a la siguiente combinación.
+        \item Si la contraseña es correcta, el script tiene éxito, guarda las credenciales en la lista \texttt{found\_credentials} y lanza un aviso en pantalla.
+    \end{itemize}
+
+    \item \textbf{Parada Inteligente (\texttt{stop\_event}):}
+    Una vez que un hilo encuentra la contraseña correcta, activa una señal de alto (\texttt{stop\_event.set()}). Esto avisa a todos los demás hilos que aborten las pruebas restantes en la cola, ahorrando tiempo valioso y evitando sobrecargar la red innecesariamente.
+\end{enumerate}
+
+\section*{Estructura de Salida}
+Al finalizar, el módulo retorna una lista de diccionarios con los usuarios y contraseñas vulnerados. Más adelante en la etapa de integración, el Grupo 4 deberá adaptar esta salida cruda para que cumpla con el esquema oficial (\texttt{schema\_resultados.json}) requerido por el orquestador principal.
+
+\section*{Conclusión}
+Este módulo demuestra el poder de la automatización y la programación concurrente en Python. A nivel defensivo, ilustra claramente por qué es crítico no utilizar contraseñas por defecto o débiles en servicios expuestos, ya que un programa automatizado puede adivinarlas en cuestión de segundos.
+
+\end{document}

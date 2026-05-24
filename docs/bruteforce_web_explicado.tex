@@ -1,0 +1,53 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{\textbf{Explicación del Módulo: Fuerza Bruta Web}\\ \large \texttt{bruteforce\_web.py}}
+\author{Suite de Auditoría de Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+El módulo \texttt{bruteforce\_web.py} (asignado al Grupo 4 para la Fase II) automatiza un ataque de \textbf{Fuerza Bruta contra formularios de inicio de sesión web} (como los de una red social, un banco o un panel de administración). A diferencia del protocolo FTP, la web (HTTP) requiere que el script simule el comportamiento de un navegador enviando los datos a través de una petición \texttt{POST}.
+
+\section*{¿Cómo funciona el código paso a paso?}
+
+\begin{enumerate}
+    \item \textbf{Configuración Inicial (Parámetros Clave):} 
+    Para que el ataque funcione, el script necesita saber tres cosas:
+    \begin{itemize}
+        \item \texttt{target\_url}: La dirección exacta donde se procesa el formulario (ej. \textit{http://sitio.com/login.php}).
+        \item \texttt{login\_data\_template}: Un diccionario o 'plantilla' que imita los campos del formulario HTML original (ej. los campos \textit{username} y \textit{password}).
+        \item \texttt{success\_indicator}: Una palabra o frase que el servidor web solo muestra cuando el inicio de sesión es exitoso (ej. \textit{'Bienvenido al panel'} o \textit{'Cerrar sesión'}).
+    \end{itemize}
+
+    \item \textbf{Generación de Combinaciones:}
+    Al igual que en otros módulos de fuerza bruta, el método \texttt{load\_dictionaries} cruza listas de usuarios y contraseñas, generando todas las combinaciones posibles y almacenándolas en una cola (\texttt{queue.Queue}).
+
+    \item \textbf{El Trabajador y las Peticiones (\texttt{\_worker}):}
+    Múltiples hilos (trabajadores concurrentes) toman combinaciones de la cola de manera simultánea. En cada intento:
+    \begin{itemize}
+        \item El hilo hace una copia de la plantilla (\texttt{login\_data\_template}) y rellena los campos con el usuario y la contraseña actuales.
+        \item Utiliza la librería \texttt{requests} para enviar esta información al servidor (\texttt{requests.post}).
+        \item El servidor responde con el código fuente HTML de la página resultante.
+    \end{itemize}
+
+    \item \textbf{Validación del Éxito:}
+    Dado que HTTP es un protocolo sin estado, un código de respuesta 200 (OK) no significa necesariamente que ingresamos correctamente, solo que la página cargó. Por ello, el script busca el \texttt{success\_indicator} dentro del texto de la respuesta (\texttt{response.text}). Si lo encuentra, ¡bingo!, guarda las credenciales y detiene a los demás hilos mediante el \texttt{stop\_event}.
+\end{enumerate}
+
+\section*{Estructura de Salida e Integración}
+El script retorna una lista cruda con las credenciales válidas encontradas. Como el Grupo 4 también es el responsable de la orquestación principal (\texttt{auditoria.py}), deberá asegurarse de que la función que llame a este módulo formatee la respuesta final para que cumpla estrictamente con el contrato del proyecto (\texttt{schema\_resultados.json}).
+
+\section*{Conclusión}
+Este módulo resalta la importancia de proteger los formularios web no solo con contraseñas fuertes, sino también implementando mecanismos de defensa contra la automatización, tales como CAPTCHAs, bloqueos temporales tras intentos fallidos (rate-limiting) o autenticación multifactor (MFA).
+
+\end{document}
