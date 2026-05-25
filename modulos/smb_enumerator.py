@@ -1,6 +1,14 @@
+# Módulo a desarrollar por el Grupo 2 (Fase II: Enumeración SMB)
+# TODO: Los estudiantes deben investigar e instalar librerías como pysmb (ej. pip install pysmb).
+# A diferencia de FTP o HTTP, Python no incluye soporte nativo para SMB en su biblioteca estándar.
 import logging
-# TODO: Los estudiantes deben investigar e instalar librerías como pysmb
-# from smb.SMBConnection import SMBConnection
+import datetime
+
+try:
+    from smb.SMBConnection import SMBConnection
+    HAS_PYSMB = True
+except ImportError:
+    HAS_PYSMB = False
 
 class SMBEnumerator:
     def __init__(self, ip_address, port=445):
@@ -14,6 +22,10 @@ class SMBEnumerator:
         Intenta establecer una sesión nula (Null Session) en el objetivo.
         Retorna True si es exitoso, False en caso contrario.
         """
+        if not HAS_PYSMB:
+            print("[!] Advertencia (G2): La librería 'pysmb' no está instalada. Ejecute: pip install pysmb")
+            return False
+            
         try:
             # TODO: Implementar conexión SMB con usuario y contraseña vacíos ("")
             # connection = SMBConnection("", "", "python_script", "target_machine", use_ntlm_v2=True)
@@ -40,14 +52,25 @@ class SMBEnumerator:
             print("[+] Sesión nula establecida con éxito.")
             self.enumerate_shares()
         
+        # REGLA DE ORO: El diccionario retornado debe cumplir con el contrato de schema_resultados.json
+        # para que el orquestador principal (auditoria.py) lo valide e integre sin errores.
         return {
-            'ip': self.ip_address,
-            'shares': self.shares,
-            'users': self.users
+            "modulo": "Enumeracion SMB",
+            "grupo": 2,
+            "estudiante": "Pendiente", # Los estudiantes deben colocar su identificador (ej. E1, E2)
+            "target": self.ip_address,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "status": "success",
+            "data": {
+                "shares": self.shares,
+                "users": self.users
+            },
+            "error_message": None
         }
 
 if __name__ == "__main__":
     # Área de pruebas independiente para el Grupo 2
+    # import json
     # enum = SMBEnumerator("10.0.0.5")
     # resultados = enum.run()
-    # print(resultados)
+    # print(json.dumps(resultados, indent=4))

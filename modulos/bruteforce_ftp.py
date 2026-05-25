@@ -1,7 +1,9 @@
+# Módulo a desarrollar por el Grupo 3 (Fase II: Fuerza Bruta FTP)
 import ftplib
 import threading
 import queue
 import logging
+import datetime
 
 class FTPBruteForcer:
     def __init__(self, ip_address, max_threads=5):
@@ -39,6 +41,11 @@ class FTPBruteForcer:
             finally:
                 self.queue.task_done()
 
+    # NOTA SOBRE LOS DICCIONARIOS:
+    # ¿De dónde provienen users_list y passwords_list?
+    # 1. Durante el desarrollo/pruebas (Grupo 3), pueden definirse estáticamente o leerse de un archivo .txt local de prueba.
+    # 2. En la integración final (Semana 7), el orquestador principal (auditoria.py / Grupo 4) será el responsable
+    #    de cargar los archivos de diccionarios reales indicados por el usuario y pasar estas listas como parámetros.
     def load_dictionaries(self, users_list, passwords_list):
         """Llena la cola con todas las combinaciones posibles (Producto Cartesiano)."""
         for u in users_list:
@@ -56,7 +63,19 @@ class FTPBruteForcer:
         for t in threads:
             t.join()
             
-        return self.found_credentials
+        # REGLA DE ORO: Cumplir con schema_resultados.json
+        return {
+            "modulo": "Fuerza Bruta FTP",
+            "grupo": 3,
+            "estudiante": "Pendiente", # Los estudiantes deben colocar su identificador
+            "target": self.ip_address,
+            "timestamp": datetime.datetime.now().isoformat(),
+            "status": "success",
+            "data": {
+                "credenciales_encontradas": self.found_credentials
+            },
+            "error_message": None
+        }
 
 if __name__ == "__main__":
     # Área de pruebas independiente para el Grupo 3
@@ -64,4 +83,5 @@ if __name__ == "__main__":
     # inst = FTPBruteForcer("127.0.0.1")
     # inst.load_dictionaries(["admin", "root"], ["12345", "admin", "password"])
     # resultados = inst.run()
-    # print(resultados)
+    # import json
+    # print(json.dumps(resultados, indent=4))

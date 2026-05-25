@@ -1,0 +1,45 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-noquoting]{babel}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\title{\textbf{Explicación del Módulo: Enumeración SMB}\\ \large \texttt{smb\_enumerator.py}}
+\author{Suite de Auditoría de Seguridad Informática}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introducción}
+El módulo \texttt{smb\_enumerator.py} (asignado al Grupo 2 para la Fase II) tiene como objetivo interactuar con los servicios de compartición de archivos en entornos Windows (NetBIOS/SMB). Su meta principal es descubrir información sensible, como carpetas compartidas y listas de usuarios, explotando configuraciones heredadas o inseguras en la red objetivo.
+
+\section*{¿Cómo funciona el código paso a paso?}
+
+\begin{enumerate}
+    \item \textbf{Gestión de Dependencias (\texttt{pysmb}):}
+    A diferencia de los protocolos web (HTTP) o FTP, Python no cuenta con soporte nativo para SMB en su biblioteca estándar. Por ello, el script depende de una librería externa llamada \texttt{pysmb}. El código incluye un bloque \texttt{try-except} inteligente en sus importaciones que verifica si la librería está instalada. Si no lo está, avisa amablemente al usuario en lugar de romper de forma abrupta toda la suite de auditoría.
+
+    \item \textbf{La Sesión Nula (\texttt{establish\_null\_session}):}
+    Una de las vulnerabilidades clásicas en redes Windows heredadas es la ``Sesión Nula'' (Null Session o IPC\$). El script intenta conectarse al puerto 445 del servidor enviando credenciales completamente vacías (usuario \texttt{""} y contraseña \texttt{""}). Si el servidor está mal configurado o es una versión antigua, aceptará esta conexión anónima.
+
+    \item \textbf{Enumeración de Recursos (\texttt{enumerate\_shares}):}
+    Una vez que el script logra establecer la sesión nula exitosamente, procede a solicitar al servidor la lista de recursos disponibles. En términos prácticos, es como entrar de forma anónima al lobby de un edificio e inmediatamente solicitar el mapa con todos los pisos, carpetas públicas e impresoras conectadas.
+
+    \item \textbf{Orquestación (\texttt{run}):}
+    El método \texttt{run} actúa como el director del módulo. Se encarga de llamar a la función de conexión, luego a la enumeración y, finalmente, recolectar todo lo encontrado.
+\end{enumerate}
+
+\section*{La Regla de Oro: Contrato de Datos}
+Un detalle muy importante para este script es que su método \texttt{run} ya está preconfigurado para empaquetar y devolver los resultados estructurados según el esquema oficial del proyecto (\texttt{schema\_resultados.json}). Incluye todos los campos obligatorios como \texttt{modulo}, \texttt{grupo}, \texttt{status} y el bloque de \texttt{data}.
+
+Al cumplir estrictamente con este contrato de datos, se asegura que cuando el Grupo 4 importe e integre este script dentro del orquestador principal (\texttt{auditoria.py}), la información fluya a la perfección sin provocar errores de validación.
+
+\section*{Conclusión}
+Este módulo es un excelente ejemplo práctico para comprender cómo los administradores de sistemas que no deshabilitan las sesiones nulas en Windows exponen la topología de su red. Además, para los estudiantes del Grupo 2, representa una oportunidad clave para aprender a integrar dependencias de terceros y a manejar interacciones con protocolos propietarios.
+
+\end{document}
